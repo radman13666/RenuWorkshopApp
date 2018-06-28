@@ -6,9 +6,9 @@ from .models import Workshop
 def index(request):
     workshops = Workshop.objects.all()
     context ={'workshop':workshops}
-    return render(request,'myapp/index.html',context)
+    return render(request,'analytics/index.html',context)
 
 def detail(request):
     workshops = Workshop.objects.all()
     context = {'workshop': workshops}
-    return render(request,'myapp/base.html',context)
+    return render(request,'analytics/base.html',context)
