@@ -5,11 +5,11 @@
     <title>{% block title%}MuApp{% endblock%}</title>
     {% load static %}
 
-<link rel="stylesheet" href="{% static 'myapp/css/global.css' %}" type="text/css">
-<link rel="stylesheet" href="{% static 'myapp/css/bootstrap.min.css' %}" type="text/css">
-<link rel="stylesheet" href="{% static 'myapp/css/bootstrap.css' %}" type="text/css">
-<link rel="stylesheet" href="{% static 'myapp/css/bootstrap-theme.min.css' %}" type="text/css">
-<link rel="stylesheet" href="{% static 'myapp/css/bootstrap-theme.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'analytics/css/global.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'analytics/css/bootstrap.min.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'analytics/css/bootstrap.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'analytics/css/bootstrap-theme.min.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'analytics/css/bootstrap-theme.css' %}" type="text/css">
 
 </head>
 <body>
@@ -25,7 +25,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{% url 'myapp:index' %}">RENU</a>
+            <a class="navbar-brand" href="{% url 'analytics:index' %}">RENU</a>
         </div>
 
         <!--items-->
@@ -33,12 +33,12 @@
 
             <ul class="nav navbar-nav">
                 <li class="active">
-                    <a href="{% url 'myapp:index' %}">
+                    <a href="{% url 'analytics:index' %}">
                         <span class="glyphicon glyphicon-user"></span>&nbsp;Statistics
                     </a>
                 </li>
                  <li class="active">
-                    <a href="{% url 'myapp:index' %}">
+                    <a href="{% url 'analytics:index' %}">
                         <span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;Workshops
                     </a>
                 </li>
@@ -101,7 +101,7 @@
 </div>
 </div>
 </body>
-<script src="{% static 'myapp/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'myapp/js/bootstrap.js' %}"></script>
-<script src="{% static 'myapp/js/jquery.js' %}"></script>
+<script src="{% static 'analytics/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'analytics/js/bootstrap.js' %}"></script>
+<script src="{% static 'analytics/js/jquery.js' %}"></script>
 </html>
