@@ -1,0 +1,86 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+{% block extrahead %}
+    <link rel="stylesheet" href="{% static 'myapp/css/bootstrap.min.css' %}" type="text/css">
+    <script src="{% static 'myapp/js/jquery.min.js' %}"></script>
+    <script src=" {% static 'myapp/js/Chart.min.js' %}"></script>
+    <script>
+        var randomColorGenerator = function () {
+            return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
+        };
+        var options = {
+            responsive: true,
+            maintainAspectRatio: true,
+            legend: {
+                position: 'left'
+            },
+            title: {
+                display: true
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        };
+        window.onload = function () {
+            var ctx = document.getElementById("attendee-chart");
+            {% regroup cl.queryset|dictsort:"gender" by get_gender_display as gender_list %}
+            var lineChart = new Chart(ctx, {
+                type: 'pie',
+
+                data: {
+                    labels: [{% for gender in gender_list %}'{{ gender.grouper }}',{% endfor %}],
+                    datasets: [{
+
+                        data: [{% for gender in gender_list %}'{{ gender.list|length }}',{% endfor %}],
+                        backgroundColor: [{% for gender in gender_list %}randomColorGenerator(),{% endfor %}]
+                    }]
+                },
+                options: options
+            });
+            ctx = document.getElementById("instructor-chart");
+            {% regroup cl.queryset|dictsort:"workshop_affiliated" by workshop_affiliated as workshop_list %}
+            lineChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: [{% for workshop in workshop_list %}'{{ workshop.grouper }}',{% endfor %}],
+                    datasets: [{
+                        data: [{% for workshop in workshop_list %}'{{ workshop.list|length }}',{% endfor %}],
+                        backgroundColor: [{% for workshop in workshop_list %}randomColorGenerator(),{% endfor %}]
+                    }]
+                }, options: options
+            });
+
+            ctx = document.getElementById("workshop-chart");
+            {% regroup cl.queryset|dictsort:"workshop_attended" by workshop_attended as workshop_list %}
+            lineChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: [{% for workshop in workshop_list %}'{{ workshop.grouper }}',{% endfor %}],
+                    datasets: [{
+                        data: [{% for workshop in workshop_list %}'{{ workshop.list|length }}',{% endfor %}],
+                        backgroundColor: [{% for workshop in workshop_list %}randomColorGenerator(),{% endfor %}]
+                    }]
+                }, options: options
+            });
+
+        }
+
+    </script>
+{% endblock %}
+{% block content %}
+    <h1> Graphs </h1>
+    <hr>
+    <div class="row">
+        <div class="col-sm-4">
+            <canvas id="attendee-chart" style="width: 100px !important;"></canvas>
+        </div>
+        <div class="col-sm-4">
+            <canvas id="instructor-chart" style="width: 100px !important;"></canvas>
+        </div>
+        <div class="col-sm-4">
+            <canvas id="workshop-chart" style="width: 100px !important;"></canvas>
+        </div>
+    </div>
+    {{ block.super }}
+{% endblock %}
