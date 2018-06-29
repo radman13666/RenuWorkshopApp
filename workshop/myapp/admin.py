@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import Workshop,Person,Track,Sponsor,Instructor,Attendee
-
+from django.apps import apps
+from django.contrib.auth.models import User
+from django.contrib.admin import AdminSite
 
 class WorkAdmin(admin.ModelAdmin):
     list_display = ('name','venue','start_date','end_date')
@@ -38,7 +40,19 @@ class PersonAdmin(admin.ModelAdmin):
     list_filter = ('institution','gender')
 
 
+class MyAdminSite(AdminSite):
+    site_header = 'RENU Workshops'
+    site_title = "RENU Workshops"
+    index_title = "RENU Workshops"
+    site_url = "https://Workshops.renu.ac.ug"
 
+admin_site = MyAdminSite(name='admin')
+app_models = apps.get_app_config('myapp').get_models()
+
+# for model in app_models:
+#     admin_site.register(model)
+
+admin_site.register(User)
 
 # Register your models here.
 admin.site.register(Workshop,WorkAdmin)
