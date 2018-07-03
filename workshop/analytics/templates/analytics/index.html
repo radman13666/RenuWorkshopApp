@@ -1,0 +1,28 @@
+{% extends 'analytics/base_login.html'%}
+<!--suppress XmlInvalidId -->
+<body>
+{% block body %}
+<div style="margin-top:20vh;">
+<h2 style="color:white">RENU WORKSHOPS</h2>
+<form action="" method="post" class="form-border">
+    {% csrf_token %}
+  <div class="form-group">
+    <label for="exampleInputName2" style="color:white">Username</label>
+    <input type="text" for="exampleInputName2" class="form-control" placeholder="Username">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1" style="color:white">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+    <div class="checkbox">
+    <label style="color:white">
+      <input type="checkbox" > Remember me
+    </label>
+  </div>
+  <button type="submit" class="btn btn-success btn-block">Submit</button>
+</form>
+</div>
+{% endblock %}
+</body>
+
+

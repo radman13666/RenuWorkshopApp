@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
 
-    'myapp',
+    'analytics',
     'admin_view_permission',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'workshop.wsgi.application'
 DATABASES = {
        'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'workshop',
+        'NAME': 'workshops',
         'USER': 'postgres',
-        'PASSWORD': 'root',
+        'PASSWORD': 'keziahrocks',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
@@ -129,5 +129,5 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'),
-                 '/home/daniel/PycharmProjects/Web/workshop/myapp/templates/admin',
+                 '/home/daniel/PycharmProjects/Web/workshop/analytics/templates/admin',
                  )
