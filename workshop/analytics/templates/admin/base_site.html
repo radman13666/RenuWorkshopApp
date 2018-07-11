@@ -1,9 +1,19 @@
 {% extends "admin/base.html" %}
 
+{% load staticfiles %}
+
 {% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
 
+{% block extrahead %}
+    <link rel="icon" href="/static/analytics/images/favicon.ico"/>
+{% endblock %}
+
 {% block branding %}
-<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('RENU Workshops') }}</a></h1>
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <img src="{% static '/analytics/images/RENU-Logo.png' %}" height="45px" />   RENU Workshop Analytics
+    </a>
+</h1>
 {% endblock %}
 
 {% block nav-global %}{% endblock %}
