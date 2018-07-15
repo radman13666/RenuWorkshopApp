@@ -1,86 +1,134 @@
 {% extends "admin/change_list.html" %}
 {% load static %}
 {% block extrahead %}
-    <link rel="stylesheet" href="{% static 'analytics/css/bootstrap.min.css' %}" type="text/css">
-    <script src="{% static 'analytics/js/jquery.min.js' %}"></script>
-    <script src=" {% static 'analytics/js/Chart.min.js' %}"></script>
-    <script>
-        var randomColorGenerator = function () {
-            return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
-        };
-        var options = {
-            responsive: true,
-            maintainAspectRatio: true,
-            legend: {
-                position: 'left'
-            },
-            title: {
-                display: true
-            },
-            animation: {
-                animateScale: true,
-                animateRotate: true
-            }
-        };
-        window.onload = function () {
-            var ctx = document.getElementById("attendee-chart");
-            {% regroup cl.queryset|dictsort:"gender" by get_gender_display as gender_list %}
-            var lineChart = new Chart(ctx, {
-                type: 'pie',
+  <script type="text/javascript"
+          src="https://www.gstatic.com/charts/loader.js">
+  </script>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
 
-                data: {
-                    labels: [{% for gender in gender_list %}'{{ gender.grouper }}',{% endfor %}],
-                    datasets: [{
+    graph_width = 600
+    graph_height = 400
 
-                        data: [{% for gender in gender_list %}'{{ gender.list|length }}',{% endfor %}],
-                        backgroundColor: [{% for gender in gender_list %}randomColorGenerator(),{% endfor %}]
-                    }]
-                },
-                options: options
-            });
-            ctx = document.getElementById("instructor-chart");
-            {% regroup cl.queryset|dictsort:"workshop_affiliated" by workshop_affiliated as workshop_list %}
-            lineChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: [{% for workshop in workshop_list %}'{{ workshop.grouper }}',{% endfor %}],
-                    datasets: [{
-                        data: [{% for workshop in workshop_list %}'{{ workshop.list|length }}',{% endfor %}],
-                        backgroundColor: [{% for workshop in workshop_list %}randomColorGenerator(),{% endfor %}]
-                    }]
-                }, options: options
-            });
+    {% regroup cl.queryset|dictsort:"gender" by get_gender_display as gender_list %}
+    //Attendee gender chart
+    google.charts.setOnLoadCallback(drawAttendeeGenderChart);
+    
+    function drawAttendeeGenderChart() {
+      
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Gender');
+      data.addColumn('number', 'Number of attendees');
 
-            ctx = document.getElementById("workshop-chart");
-            {% regroup cl.queryset|dictsort:"workshop_attended" by workshop_attended as workshop_list %}
-            lineChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: [{% for workshop in workshop_list %}'{{ workshop.grouper }}',{% endfor %}],
-                    datasets: [{
-                        data: [{% for workshop in workshop_list %}'{{ workshop.list|length }}',{% endfor %}],
-                        backgroundColor: [{% for workshop in workshop_list %}randomColorGenerator(),{% endfor %}]
-                    }]
-                }, options: options
-            });
+      data.addRows([{% for gender in gender_list %}
+        [ '{{ gender.grouper }}', {{ gender.list|length }} ], {% endfor %}
+      ]);
+      
+      var options = {
+        {% if page == "instructor" %}title: 'Instructor gender distribution',
+        {% elif page == "attendee" %}title: 'Attendee gender distribution',
+        {% endif %}
+        width: graph_width,
+        height: graph_height
+      };
 
-        }
+      var genderChart = new google.visualization.PieChart(
+        document.getElementById("gender-chart")
+      );
+      genderChart.draw(data, options);
+    };
 
-    </script>
+    {% regroup cl.queryset by workshop_affiliated as workshop_affiliated_list %}
+    //Instructor chart
+    google.charts.setOnLoadCallback(drawInstructorChart);
+
+    function drawInstructorChart() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Workshop');
+      data.addColumn('number', 'Number of instructors');
+
+      data.addRows([{% for workshop in workshop_affiliated_list %}
+        [ '{{ workshop.grouper }}', {{ workshop.list|length }} ], {% endfor %}
+      ]);
+
+      var options = {
+        title: 'Attendees per workshop',
+        width: graph_width,
+        height: graph_height
+      };
+
+      var instructorChart = new google.visualization.PieChart(
+        document.getElementById("instructor-chart")
+      );
+      instructorChart.draw(data, options);
+    };
+
+    {% regroup cl.queryset by workshop_attended as workshop_attended_list %}
+    //Attendance chart
+    google.charts.setOnLoadCallback(drawAttendanceChart);
+
+    function drawAttendanceChart() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Workshop');
+      data.addColumn('number', 'Attendance');
+
+      data.addRows([{% for workshop in workshop_attended_list %}
+        [ '{{ workshop.grouper }}', {{ workshop.list|length }} ], {% endfor %}
+      ]);
+
+      var options = {
+        title: 'Attendees per workshop',
+        width: graph_width,
+        height: graph_height
+      };
+
+      var attendanceChart = new google.visualization.PieChart(
+        document.getElementById("attendance-chart")
+      );
+      attendanceChart.draw(data, options);
+    };
+
+    {%if page == "sponsor" %}
+    {% regroup cl.queryset by name as workshop_sponsored_list %}
+    //Sponsor chart
+    google.charts.setOnLoadCallback(drawSponsorChart);
+
+    function drawSponsorChart() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Sponsor');
+      data.addColumn('number', 'Number of workshops sponsored');
+
+      data.addRows([{% for workshop in workshop_sponsored_list %}
+        [ '{{ workshop.grouper }}', {{ workshop.list|length }} ], {% endfor %}
+      ]);
+
+      var options = {
+        title: 'Sponsorship statistics',
+        width: graph_width,
+        height: graph_height
+      };
+
+      var sponsorChart = new google.visualization.PieChart(
+        document.getElementById("sponsor-chart")
+      );
+      sponsorChart.draw(data, options);
+    };
+    {% endif %}
+
+  </script>
 {% endblock %}
 {% block content %}
-    <h1> Graphs </h1>
-    <hr>
-    <div class="row">
-        <div class="col-sm-4">
-            <canvas id="attendee-chart" style="width: 100px !important;"></canvas>
-        </div>
-        <div class="col-sm-4">
-            <canvas id="instructor-chart" style="width: 100px !important;"></canvas>
-        </div>
-        <div class="col-sm-4">
-            <canvas id="workshop-chart" style="width: 100px !important;"></canvas>
-        </div>
-    </div>
+    <!--Table and divs that hold the pie charts-->
+    <table class="columns">
+      <tr>
+        {% if page == "attendee" or page == "instructor" %}<td><div id="gender-chart" style="border: 1px solid #ccc"></div></td>{% endif %}
+        {% if page == "instructor" %}<td><div id="instructor-chart" style="border: 1px solid #ccc"></div></td>{% endif %}
+        {% if page == "attendee" %}<td><div id="attendance-chart" style="border: 1px solid #ccc"></div></td>{% endif %}
+        {% if page == "sponsor" %}<td><div id="sponsor-chart" style="border: 1px solid #ccc"></div></td>{% endif %}
+      </tr>
+    </table>
     {{ block.super }}
 {% endblock %}

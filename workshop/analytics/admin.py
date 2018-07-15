@@ -25,6 +25,14 @@ class AttendeeAdmin(admin.ModelAdmin):
     save_on_top = True
     change_list_template = 'change_list_graph.html'
 
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(
+            request,
+            extra_context=extra_context,
+        )
+        response.context_data['page'] = "attendee"
+        return response
+
 
 class InstructorAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'gender', 'email', 'institution', 
@@ -35,10 +43,28 @@ class InstructorAdmin(admin.ModelAdmin):
     save_on_top = True
     change_list_template = 'change_list_graph.html'
 
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(
+            request,
+            extra_context=extra_context,
+        )
+        response.context_data['page'] = "instructor"
+        return response
+
 
 class SponsorAdmin(admin.ModelAdmin,):
     list_display = ('name', 'workshop_sponsored')
     list_filter = ('workshop_sponsored', 'name')
+
+    change_list_template = 'change_list_graph.html'
+
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(
+            request,
+            extra_context=extra_context,
+        )
+        response.context_data['page'] = "sponsor"
+        return response
 
 
 class TrackAdmin(admin.ModelAdmin):
