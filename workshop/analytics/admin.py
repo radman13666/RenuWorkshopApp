@@ -1,8 +1,5 @@
 from django.contrib import admin
 from .models import Workshop,Person,Track,Sponsor,Instructor,Attendee,Institution
-# from django.apps import apps
-# from django.contrib.auth.models import User
-# from django.contrib.admin import AdminSite
 
 
 class WorkAdmin(admin.ModelAdmin):
