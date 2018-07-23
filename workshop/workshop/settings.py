@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@cpjn^q=65lp&m9hd+fq#(4*@*d5_%q&+v6bwf((r^w^%o-a55'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False #True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'workshop.wsgi.application'
 DATABASES = {
        'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'workshops',
-        'USER': 'postgres',
-        'PASSWORD': 'keziahrocks',
+        'NAME': 'workshopappdb',
+        'USER': 'workshopapp',
+        'PASSWORD': 'keziarocks',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
@@ -112,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Kampala'
 
 USE_I18N = True
 
@@ -127,6 +127,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'),
-                 '/home/daniel/PycharmProjects/Web/workshop/analytics/templates/admin',
-                 )
+TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'),)
