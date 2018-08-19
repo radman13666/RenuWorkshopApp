@@ -8,10 +8,12 @@ MAX_CHAR_LENGTH = 100
 
 class Workshop(models.Model):
 
-    name = models.CharField(max_length=MAX_CHAR_LENGTH, db_column="Name", null=True)
+    name = models.CharField(max_length=MAX_CHAR_LENGTH, db_column="Name",
+                            null=True)
     start_date = models.DateField(db_column="Start_Date", null=True)
     end_date = models.DateField(db_column="End_Date", null=True)
-    venue = models.CharField(max_length=MAX_CHAR_LENGTH, db_column="Venue", null=True)
+    venue = models.CharField(max_length=MAX_CHAR_LENGTH, db_column="Venue",
+                             null=True)
    
     def __str__(self):
         return self.name
@@ -38,9 +40,11 @@ class Track(models.Model):
 
 class Institution(models.Model):
     institution_name = models.CharField(max_length=MAX_CHAR_LENGTH,
-                                   db_column="Institution_name", null=True)
+                                        db_column="Institution_name",
+                                        null=True)
     location = models.CharField(max_length=MAX_CHAR_LENGTH,
-                                   db_column="Location", null=True)
+                                db_column="Location", null=True)
+
     def __str__(self):
         return self.institution_name
 
@@ -57,7 +61,7 @@ class Person(models.Model):
                                  db_column="Last_Name",default='')
     email = models.EmailField(db_column="Email_Address",default='')
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE,
-                                         db_column="Institution",default='')
+                                    db_column="Institution",default='')
     gender = models.CharField(max_length=1, db_column="Gender",
                               choices=GENDER_CHOICES,default='')
     country = CountryField(blank_label='select country', db_column="Country")
@@ -76,9 +80,11 @@ class Attendee(Person):
 
 class Instructor(Person):
     workshop_affiliated = models.ForeignKey(Workshop, on_delete=models.CASCADE,
-                                            db_column="Workshop_Affiliated",default='')
+                                            db_column="Workshop_Affiliated",
+                                            default='')
     track_they_teach = models.ForeignKey(Track, on_delete=models.CASCADE,
-                                         db_column="Track_They_Teach",default='')
+                                         db_column="Track_They_Teach",
+                                         default='')
 
     def __str__(self):
         return self.first_name
