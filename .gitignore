@@ -2,4 +2,5 @@
 */**/*.pyc
 .idea/*.iml
 .idea/*.xml
+.idea/codeStyles/*
 */**/migrations/
