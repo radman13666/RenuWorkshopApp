@@ -1,5 +1,4 @@
 from django.db import models
-from django_countries.fields import CountryField
 
 # Create your models here.
 
@@ -43,9 +42,10 @@ class Person(models.Model):
     institution = models.CharField(max_length=MAX_CHAR_LENGTH,
                                    db_column="Institution", null=True)
     gender = models.CharField(max_length=1, db_column="Gender",
-                              choices=GENDER_CHOICES, null=False, default='X')
-    country = CountryField(blank_label='select country', db_column="Country",
-                           null=False, default=' ')
+                              choices=GENDER_CHOICES, null=True,
+                              default='X')
+    country = models.CharField(max_length=MAX_CHAR_LENGTH, db_column="Country",
+                           null=True, default='UNSPECIFIED')
 
     def __str__(self):
         fname = str(self.first_name)

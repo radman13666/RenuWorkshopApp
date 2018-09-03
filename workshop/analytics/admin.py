@@ -16,10 +16,17 @@ class CsvImportForm(forms.Form):
 
 
 class WorkshopAdmin(admin.ModelAdmin):
-    list_display = ('name', 'venue', 'start_date', 'end_date')
-    list_filter = ('venue', 'host', 'sponsors', 'facilitators', 
+    list_display = ('name', 'venue', 'start_date', 'end_date',
+                    'get_facilitators')
+    list_filter = ('venue', 'host', 'sponsors', 'facilitators',
                    'participants')
+    filter_horizontal = ('facilitators', 'participants', 'sponsors')
     search_fields = ('name', 'venue')
+
+    def get_facilitators(self, obj):
+        return " \n ".join([str(f) for f in obj.facilitators.all()])
+
+    get_facilitators.short_description = "Facilitators"
 
 
 # TODO find out how to show workshops for facilitator|sponsor|participant
@@ -51,17 +58,21 @@ class ParticipantAdmin(admin.ModelAdmin):
             io_string = io.StringIO(decoded_file)
             reader = csv.reader(io_string, delimiter=',')
             # reader = csv.reader(open(csv_file), delimiter=',')
-            for row in reader:
+            reader_list = list(reader)
+
+            for i in range(1, len(reader_list)):
+                row = reader_list[i]
+
                 post = Participant()
 
-                both_names = re.split(r' ', row[1], maxsplit=1)
+                both_names = re.split(r' ', row[0], maxsplit=1)
                 post.first_name = both_names[0]
                 post.last_name = both_names[1]
 
-                post.institution = row[3]
-                post.email = row[2]
-                post.country = row[5]
-                post.gender = row[4]
+                post.institution = row[2]
+                post.email = row[1]
+                post.country = row[4]
+                post.gender = row[3]
                 post.save()
 
             self.message_user(request,
@@ -106,7 +117,12 @@ class FacilitatorAdmin(admin.ModelAdmin):
             io_string = io.StringIO(decoded_file)
             reader = csv.reader(io_string, delimiter=',')
             # reader = csv.reader(open(csv_file), delimiter=',')
-            for row in reader:
+
+            reader_list = list(reader)
+
+            for i in range(1, len(reader_list)):
+                row = reader_list[i]
+
                 post = Facilitator()
 
                 both_names = re.split(r' ', row[0], maxsplit=1)
